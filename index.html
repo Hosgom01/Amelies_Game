@@ -1143,6 +1143,7 @@ h1, h2, .big-letter { font-family: 'Fredoka One', cursive; }
     <div class="wbuild-length-btns">
       <button class="wbuild-len-btn active" onclick="setWordBuildLength(2)">2 letters</button>
       <button class="wbuild-len-btn" onclick="setWordBuildLength(3)">3 letters</button>
+      <button class="wbuild-len-btn" onclick="setWordBuildLength(4)">4 letters</button>
     </div>
     <div class="wbuild-slots" id="wbuild-slots"></div>
     <div class="wbuild-feedback" id="wbuild-feedback"></div>
@@ -1998,53 +1999,96 @@ const TRANSFER_THEMES = [
 // ╔══════════════════════════════════════════════════════════════════╗
 // ║         ✏️  EDIT HERE — WORD READING & BUILDING LISTS  ✏️        ║
 // ║                                                                  ║
-// ║  WORDS_2 — shown in the "📖 Read Words" 2-letter round, and     ║
-// ║            also accepted as valid words in "🔨 Build Words".    ║
-// ║                                                                  ║
-// ║  WORDS_3 — shown in the "📖 Read Words" 3-letter round, and     ║
-// ║            also accepted as valid words in "🔨 Build Words".    ║
-// ║                                                                  ║
+// ║  WORDS_2 — 2-letter round (pick 3 at random each session)       ║
+// ║  WORDS_3 — 3-letter round (pick 3 at random each session)       ║
+// ║  WORDS_4 — 4-letter round (pick 3 at random each session)       ║
+// ║  All three lists feed the "🔨 Build Words" validator too.       ║
 // ║  • Add or remove words freely — one quoted word per item.       ║
-// ║  • Words must use only the 26 game letters (full alphabet)          ║
 // ║  • The game picks 3 random words from each list per session.    ║
 // ╚══════════════════════════════════════════════════════════════════╝
 
 const WORDS_2 = [
   // ── Add or remove 2-letter words here ──────────────────────────
-  'at', 'an', 'as','in', 'it', 'am', 'is', 'if','up','us',
-  'on',
+  'at', 'an', 'in', 'it', 'am', 'is', 'up', 'on', 'if',
+  'go', 'do', 'no', 'so', 'be', 'he', 'me', 'we', 'by', 'my', 'us',
 ];
 
 const WORDS_3 = [
-  // ── Add or remove 3-letter words here ──────────────────────────
-  // s words
-  'sat', 'sit', 'sip', 'sun',
-  // a words
-  'ant', 'ask', 'act',
-  // t words
-  'tap', 'tip', 'tin', 'top', 'ten', 'tag',
-  // p words
-  'pat', 'pan', 'pin', 'pit', 'pig', 'pod', 'pop', 'pot', 'pad','peg','pup',
-  // i words
-  'ink', 'ill',
-  // n words
-  'nap', 'nip', 'nod', 'net', 'not','nut','nod',
-  // m words
-  'man', 'map', 'mat', 'mad', 'mop', 'men', 'mug', 'mum',
-  // d words
-  'dog', 'dot', 'dig', 'dip', 'dad', 'dug',
-  // g words
-  'got', 'god', 'gap', 'get', 'gum',
-  // o words
-  'off', 'odd',
-  // c words
-  'cap', 'can', 'cat', 'cop', 'cup', 'cog', 'cot',
-  // k words
-  'kid', 'kin',
+  // ── Short-a words ──────────────────────────────────────────────
+  'bat', 'cat', 'hat', 'mat', 'rat', 'sat',
+  'can', 'fan', 'man', 'pan', 'ran', 'tan', 'van',
+  'cap', 'map', 'nap', 'tap', 'lap', 'rap', 'gap',
+  'bag', 'tag', 'wag', 'rag',
+  'ham', 'jam', 'yam',
+  'bad', 'mad', 'sad', 'dad', 'had',
+  // ── Short-e words ──────────────────────────────────────────────
+  'bed', 'red', 'fed', 'led', 'wed',
+  'ten', 'hen', 'men', 'pen', 'den',
+  'net', 'set', 'get', 'jet', 'let', 'pet', 'wet', 'yet',
+  'leg', 'peg', 'beg', 'keg',
+  'yes', 'vet', 'web',
+  // ── Short-i words ──────────────────────────────────────────────
+  'big', 'dig', 'pig', 'wig', 'fig', 'jig',
+  'bit', 'fit', 'hit', 'kit', 'sit', 'pit', 'lit',
+  'tip', 'dip', 'hip', 'lip', 'rip', 'sip', 'zip',
+  'win', 'bin', 'pin', 'tin', 'fin', 'sin',
+  'kid', 'rid', 'lid', 'did', 'hid', 'bid',
+  'him', 'dim', 'rim',
+  // ── Short-o words ──────────────────────────────────────────────
+  'hot', 'lot', 'dot', 'got', 'not', 'pot', 'rot',
+  'top', 'hop', 'mop', 'pop', 'cop', 'sob',
+  'dog', 'fog', 'log', 'hog', 'bog',
+  'nod', 'rod', 'cod',
+  'box', 'fox',
+  'job', 'rob', 'mob',
+  'cot', 'dot',
+  // ── Short-u words ──────────────────────────────────────────────
+  'bug', 'dug', 'hug', 'jug', 'mug', 'rug', 'tug',
+  'bun', 'fun', 'gun', 'run', 'sun', 'nun',
+  'bud', 'mud',
+  'cup', 'pup',
+  'cut', 'but', 'gut', 'hut', 'nut', 'rut',
+  'tub', 'cub', 'pub', 'hub', 'sub',
+  'gum', 'rum', 'sum', 'bum',
+  'bus', 'pus',
 ];
 
-// ── This combines both lists for the word-building validator ──────
-const WORDS_ALL = new Set([...WORDS_2, ...WORDS_3]);
+const WORDS_4 = [
+  // ── -ack words ─────────────────────────────────────────────────
+  'back', 'jack', 'lack', 'pack', 'rack', 'sack', 'tack',
+  // ── -ick words ─────────────────────────────────────────────────
+  'kick', 'lick', 'pick', 'sick', 'tick', 'wick',
+  // ── -ock words ─────────────────────────────────────────────────
+  'dock', 'lock', 'rock', 'sock', 'mock',
+  // ── -uck words ─────────────────────────────────────────────────
+  'duck', 'luck', 'suck', 'tuck', 'buck',
+  // ── -ink/-ing words ────────────────────────────────────────────
+  'link', 'pink', 'rink', 'sink', 'wink',
+  'king', 'ring', 'sing', 'wing', 'ding', 'ping',
+  // ── -ump words ─────────────────────────────────────────────────
+  'bump', 'dump', 'jump', 'lump', 'pump', 'rump', 'hump',
+  // ── -amp/-and words ────────────────────────────────────────────
+  'camp', 'damp', 'lamp', 'ramp',
+  'band', 'hand', 'land', 'sand',
+  // ── -end/-ind words ────────────────────────────────────────────
+  'bend', 'lend', 'mend', 'send', 'tend', 'rend',
+  'find', 'kind', 'mind', 'wind', 'bind',
+  // ── -est/-ust words ────────────────────────────────────────────
+  'best', 'nest', 'rest', 'test', 'vest', 'west', 'pest',
+  'bust', 'dust', 'gust', 'just', 'must', 'rust',
+  // ── -ast/-elt words ────────────────────────────────────────────
+  'fast', 'last', 'past', 'vast', 'mast',
+  'belt', 'felt', 'melt', 'welt',
+  // ── -ent/-int words ────────────────────────────────────────────
+  'dent', 'rent', 'sent', 'tent', 'vent', 'went', 'bent',
+  'hint', 'mint', 'tint', 'lint',
+  // ── -ong/-ond words ────────────────────────────────────────────
+  'long', 'song', 'gong',
+  'bond', 'fond', 'pond',
+];
+
+// ── This combines all lists for the word-building validator ───────
+const WORDS_ALL = new Set([...WORDS_2, ...WORDS_3, ...WORDS_4]);
 
 // ===================== STATE =====================
 const state = {
@@ -2637,8 +2681,8 @@ function _singWord(word) {
 function _showWordReadCard() {
   const words = state.wordReadList;
   const idx = state.wordReadIdx;
-  const phaseLabel = state.wordReadPhase === 0 ? '2-letter words' : '3-letter words';
-  document.getElementById('wread-phase').textContent = phaseLabel;
+  const phaseLabels = ['2-letter words', '3-letter words', '4-letter words'];
+  document.getElementById('wread-phase').textContent = phaseLabels[state.wordReadPhase];
   document.getElementById('wread-progress').textContent = `Word ${idx + 1} of ${words.length}`;
   // Trigger re-animation
   const el = document.getElementById('wread-word');
@@ -2650,7 +2694,7 @@ function _showWordReadCard() {
   document.getElementById('wread-sing').textContent = _singWord(words[idx]);
   // Button label
   const isLastWord = idx === words.length - 1;
-  const isLastPhase = state.wordReadPhase === 1;
+  const isLastPhase = state.wordReadPhase === 2;
   document.getElementById('wread-next-btn').textContent =
     (isLastWord && isLastPhase) ? '🎉 All done! →' : '⭐ Well done! Next →';
 }
@@ -2680,6 +2724,19 @@ function wordReadNext() {
     el.textContent = '🌟';
     document.getElementById('wread-phase').textContent = 'Amazing!';
     document.getElementById('wread-progress').textContent = 'Now for 3-letter words!';
+    document.getElementById('wread-next-btn').textContent = "Let's go! →";
+  } else if (state.wordReadPhase === 1) {
+    // Transition to 4-letter words
+    state.wordReadPhase = 2;
+    state.wordReadIdx = 0;
+    state.wordReadList = shuffle([...WORDS_4]).slice(0, 3);
+    state.wordReadTransition = true;
+    launchConfetti(50);
+    const el = document.getElementById('wread-word');
+    el.style.animation = 'none'; el.offsetHeight; el.style.animation = '';
+    el.textContent = '⭐';
+    document.getElementById('wread-phase').textContent = 'Brilliant!';
+    document.getElementById('wread-progress').textContent = 'Now for 4-letter words!';
     document.getElementById('wread-next-btn').textContent = "Let's go! →";
   } else {
     // Fully finished
@@ -3518,15 +3575,17 @@ function startWordBuild() {
   wbuildState.slots = ['', ''];
   wbuildState.selectedSlot = -1;
 
-  // Build letter keys once (lazy)
+  // Build letter keys once (lazy) — alphabetical order
   const keysEl = document.getElementById('wbuild-keys');
   if (!keysEl.hasChildNodes()) {
-    LETTERS.forEach((letter, i) => {
+    const sortedLetters = [...LETTERS].sort();
+    sortedLetters.forEach(letter => {
+      const wheelIdx = LETTERS.indexOf(letter);
       const btn = document.createElement('button');
       btn.className = 'wbuild-key';
       btn.textContent = letter;
-      btn.style.borderColor = WHEEL_COLORS[i];
-      btn.style.color = WHEEL_COLORS[i];
+      btn.style.borderColor = WHEEL_COLORS[wheelIdx];
+      btn.style.color = WHEEL_COLORS[wheelIdx];
       btn.onclick = () => wbuildTapKey(letter);
       keysEl.appendChild(btn);
     });
@@ -3542,9 +3601,6 @@ function setWordBuildLength(n) {
   wbuildState.selectedSlot = -1;
   document.getElementById('wbuild-feedback').textContent = '';
   _renderWordBuild();
-  document.querySelectorAll('.wbuild-len-btn').forEach((b, i) => {
-    b.classList.toggle('active', (i === 0 ? 2 : 3) === n);
-  });
 }
 
 function wbuildClear() {
@@ -3628,8 +3684,9 @@ function _renderWbuildSlots() {
 }
 
 function _renderWordBuild() {
+  const lengths = [2, 3, 4];
   document.querySelectorAll('.wbuild-len-btn').forEach((b, i) => {
-    b.classList.toggle('active', (i === 0 ? 2 : 3) === wbuildState.numSlots);
+    b.classList.toggle('active', lengths[i] === wbuildState.numSlots);
   });
   _renderWbuildSlots();
   document.getElementById('wbuild-feedback').textContent = '';
